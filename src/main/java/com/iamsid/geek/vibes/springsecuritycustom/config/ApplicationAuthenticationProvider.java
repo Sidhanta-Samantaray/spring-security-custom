@@ -3,8 +3,8 @@ package com.iamsid.geek.vibes.springsecuritycustom.config;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -26,7 +26,7 @@ public class ApplicationAuthenticationProvider implements AuthenticationProvider
 		 * Ideally these details will be fetched from Database or any OAuth Provider
 		 */
 		if(!authentication.getName().equalsIgnoreCase("admin")) {
-			throw new AccessDeniedException("Invalid User");
+			throw new BadCredentialsException("Invalid User");
 		}
 
 		/*

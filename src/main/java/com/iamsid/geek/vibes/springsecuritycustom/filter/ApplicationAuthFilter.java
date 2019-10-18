@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -51,8 +51,9 @@ public class ApplicationAuthFilter extends AbstractAuthenticationProcessingFilte
 	protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,
 			AuthenticationException failed) throws IOException, ServletException {
 		// TODO Auto-generated method stub
-		LOGGER.error("unsuccessfulAuthentication");
-		super.unsuccessfulAuthentication(request, response, failed);
+		LOGGER.error("unsuccessful Authentication:-"+failed.getMessage());
+		//super.unsuccessfulAuthentication(request, response, failed);
+		response.sendError(HttpServletResponse.SC_UNAUTHORIZED, failed.getMessage());
 	}
 
 
@@ -65,7 +66,11 @@ public class ApplicationAuthFilter extends AbstractAuthenticationProcessingFilte
 	@Override
 	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
 			throws AuthenticationException, IOException, ServletException {
-		LOGGER.info("Attempt Authtentication (Extract Header Value)");
+		/*
+		 * Just for Demo - In real world scenario  get from token
+		 */
+		String user = request.getHeader("x-auth-user");
+		
 		/*
 		 * Avoid Authentication if already authenticated
 		 */
@@ -74,14 +79,14 @@ public class ApplicationAuthFilter extends AbstractAuthenticationProcessingFilte
 			LOGGER.info("Already Authenticated");
 			return SecurityContextHolder.getContext().getAuthentication();
 		}
-		/*
-		 * Just for Demo - In real world scenario  get from token
-		 */
-		String user = request.getHeader("x-auth-user");
+		
 		
 		if(StringUtils.isEmpty(user)) {
-			throw new AccessDeniedException("Invalid User");
+			throw new InsufficientAuthenticationException("Missing Credentials");
 		}
+
+		LOGGER.info("Attempt Authtentication (Extract Header Value):-"+user);
+		
 		return this.getAuthenticationManager().authenticate(new UsernamePasswordAuthenticationToken(user, null));
 	}
 	
