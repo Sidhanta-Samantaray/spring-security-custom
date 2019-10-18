@@ -31,8 +31,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.and()
 		.addFilterBefore(applicationAuthFilter() , UsernamePasswordAuthenticationFilter.class)
 		.anonymous().disable();
-		
-		
 
 	}
 	public String defaultFilterProcessesUrl() {
