@@ -1,1 +1,2 @@
 # spring-security-custom
+## Demo application to show how to use custom filter and set the Securitycontext with authentication principal.(Not to be used for production or enterprise application , only for learning purpose)
