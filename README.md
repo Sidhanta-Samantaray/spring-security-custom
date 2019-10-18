@@ -2,7 +2,7 @@
 
 ##### Demo application to show how to use custom filter and set the Securitycontext with authentication principal.(Not to be used for production or enterprise application , only for learning purpose)
 
-######x-auth-user is used as request header for all the secured end-point.
+###### x-auth-user is used as request header for all the secured end-point.
 
 ###### End-point Details
 * /vibes/demo/api/ping
