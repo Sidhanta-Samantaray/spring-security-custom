@@ -19,13 +19,13 @@ protected void configure(HttpSecurity http) throws Exception {
 		.httpBasic().disable()
 		.formLogin().disable()
 		.logout().disable()
-		.sessionManagement()
-	    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-	    .and()
+		.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+	        .and()
 		.authorizeRequests()
-		.antMatchers("/*/ping").permitAll()
-		.antMatchers("/v1/**").authenticated()
+		.antMatchers("/*/ping").permitAll()/* Accessible without authentication */
+		.antMatchers("/v1/**").authenticated()/*Secured End-Points, needs Authentication*/
 		.and()
+		/*Making Sure Custom Authentication Filter is fired before the Spring Provided Filter*/
 		.addFilterBefore(applicationAuthFilter() , UsernamePasswordAuthenticationFilter.class)
 		.anonymous().disable();
 	} 
