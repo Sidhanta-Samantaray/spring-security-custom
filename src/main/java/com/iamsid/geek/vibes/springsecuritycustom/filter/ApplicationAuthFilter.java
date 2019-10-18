@@ -33,11 +33,18 @@ public class ApplicationAuthFilter extends AbstractAuthenticationProcessingFilte
 	@Override
 	protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
 			Authentication authResult) throws IOException, ServletException {
+		
+		LOGGER.info("Inside Successful Authentication Handler");
+		
+		
 		SecurityContext context = SecurityContextHolder.createEmptyContext();
 		context.setAuthentication(authResult);
 		SecurityContextHolder.setContext(context);
+		
+		LOGGER.info("Add the Authentication Object to Security Context");
+	
 		chain.doFilter(request, response);
-		return;
+		
 	}
 	
 	@Override
@@ -58,7 +65,7 @@ public class ApplicationAuthFilter extends AbstractAuthenticationProcessingFilte
 	@Override
 	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
 			throws AuthenticationException, IOException, ServletException {
-		LOGGER.info("Attempt Auth");
+		LOGGER.info("Attempt Authtentication (Extract Header Value)");
 		/*
 		 * Avoid Authentication if already authenticated
 		 */
