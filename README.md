@@ -8,7 +8,7 @@
 * /vibes/demo/api/ping
      * Accessible without any x-aut-header
 * /vibes/demo/api/secure/ping
-      * Secured End-point, need to set the x-auth-header as *admin*
+     * Secured End-point, need to set the x-auth-header as *admin*
       
       
 ##### Configuration to Add Custom Filter to Filter chain     
@@ -80,6 +80,7 @@ public Authentication attemptAuthentication(HttpServletRequest request, HttpServ
 		 */
 		String[] roles = new String[] { "ROLE_AUTHENTICATED"};
 		
+		//Below Constructor call will set the authentication to TRUE
 		return new UsernamePasswordAuthenticationToken(authentication.getPrincipal(), null,AuthorityUtils.createAuthorityList(roles));
 	}
 ```
@@ -92,7 +93,7 @@ public Authentication attemptAuthentication(HttpServletRequest request, HttpServ
 		
 		LOGGER.info("Inside Successful Authentication Handler");
 		
-		
+		//Create an emptty context and add the Authentication object to current Context
 		SecurityContext context = SecurityContextHolder.createEmptyContext();
 		context.setAuthentication(authResult);
 		SecurityContextHolder.setContext(context);
