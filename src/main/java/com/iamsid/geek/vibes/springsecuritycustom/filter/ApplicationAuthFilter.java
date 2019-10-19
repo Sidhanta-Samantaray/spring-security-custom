@@ -33,18 +33,17 @@ public class ApplicationAuthFilter extends AbstractAuthenticationProcessingFilte
 	@Override
 	protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
 			Authentication authResult) throws IOException, ServletException {
-		
+
 		LOGGER.info("Inside Successful Authentication Handler");
-		
-		
-		SecurityContext context = SecurityContextHolder.createEmptyContext();
-		context.setAuthentication(authResult);
-		SecurityContextHolder.setContext(context);
-		
-		LOGGER.info("Add the Authentication Object to Security Context");
-	
+		if (!this.isAlreadyAuthenticated()) {
+			SecurityContext context = SecurityContextHolder.createEmptyContext();
+			context.setAuthentication(authResult);
+			SecurityContextHolder.setContext(context);
+			LOGGER.info("Add the Authentication Object to Security Context");
+		}
+
 		chain.doFilter(request, response);
-		
+
 	}
 	
 	@Override
@@ -52,7 +51,6 @@ public class ApplicationAuthFilter extends AbstractAuthenticationProcessingFilte
 			AuthenticationException failed) throws IOException, ServletException {
 		// TODO Auto-generated method stub
 		LOGGER.error("unsuccessful Authentication:-"+failed.getMessage());
-		//super.unsuccessfulAuthentication(request, response, failed);
 		response.sendError(HttpServletResponse.SC_UNAUTHORIZED, failed.getMessage());
 	}
 
@@ -72,15 +70,11 @@ public class ApplicationAuthFilter extends AbstractAuthenticationProcessingFilte
 		String user = request.getHeader("x-auth-user");
 		
 		/*
-		 * Avoid Authentication if already authenticated
+		 * Avoid Authentication Process if already authenticated
 		 */
-		if(SecurityContextHolder.getContext().getAuthentication()!=null 
-				&& SecurityContextHolder.getContext().getAuthentication().isAuthenticated()) {
-			LOGGER.info("Already Authenticated");
+		if(this.isAlreadyAuthenticated()) {
 			return SecurityContextHolder.getContext().getAuthentication();
 		}
-		
-		
 		if(StringUtils.isEmpty(user)) {
 			throw new InsufficientAuthenticationException("Missing Credentials");
 		}
@@ -89,5 +83,12 @@ public class ApplicationAuthFilter extends AbstractAuthenticationProcessingFilte
 		
 		return this.getAuthenticationManager().authenticate(new UsernamePasswordAuthenticationToken(user, null));
 	}
-	
+	private boolean isAlreadyAuthenticated() {
+		if(SecurityContextHolder.getContext().getAuthentication()!=null 
+				&& SecurityContextHolder.getContext().getAuthentication().isAuthenticated()) {
+			LOGGER.info("Already Authenticated");
+			return true;
+		}
+		return false;
+	}
 }
