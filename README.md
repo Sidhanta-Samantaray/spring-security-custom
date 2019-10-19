@@ -7,7 +7,7 @@
 ###### End-point Details
 * /vibes/demo/api/ping
      * Accessible without x-auth-header
-* /vibes/demo/api/secure/ping
+* /vibes/demo/api/v1/secure/ping
      * Secured End-point, need to set the x-auth-header as *admin*
       
       
