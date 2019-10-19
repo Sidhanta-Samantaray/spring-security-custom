@@ -93,7 +93,7 @@ public Authentication attemptAuthentication(HttpServletRequest request, HttpServ
 		
 		LOGGER.info("Inside Successful Authentication Handler");
 		
-		//Create an emptty context and add the Authentication object to current Context
+		//Create an empty context and add the Authentication object to current Context
 		SecurityContext context = SecurityContextHolder.createEmptyContext();
 		context.setAuthentication(authResult);
 		SecurityContextHolder.setContext(context);
