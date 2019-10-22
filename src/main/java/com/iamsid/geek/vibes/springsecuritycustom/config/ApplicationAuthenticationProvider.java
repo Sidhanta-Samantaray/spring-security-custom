@@ -1,8 +1,6 @@
 package com.iamsid.geek.vibes.springsecuritycustom.config;
 
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -11,15 +9,16 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.stereotype.Service;
 
+import lombok.extern.slf4j.Slf4j;
+
 
 @Service
+@Slf4j
 public class ApplicationAuthenticationProvider implements AuthenticationProvider {
-
-	private static final Log LOGGER=LogFactory.getLog(ApplicationAuthenticationProvider.class);
 	
 	@Override
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-		LOGGER.info("Authentication Process Inside Authentication Provider Started");
+		log.info("Authentication Process Inside Authentication Provider Started");
 		
 		/*
 		 * For Demo Only
@@ -34,7 +33,7 @@ public class ApplicationAuthenticationProvider implements AuthenticationProvider
 		 */
 		String[] roles = new String[] { "ROLE_AUTHENTICATED"};
 		
-		LOGGER.info("Authentication Process Inside Authentication Provider Completed");
+		log.info("Authentication Process Inside Authentication Provider Completed");
 		
 		return new UsernamePasswordAuthenticationToken(authentication.getPrincipal(), null,AuthorityUtils.createAuthorityList(roles));
 		

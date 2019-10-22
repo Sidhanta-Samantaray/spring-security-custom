@@ -8,8 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -19,9 +17,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
-public class ApplicationAuthFilter extends AbstractAuthenticationProcessingFilter {
+import lombok.extern.slf4j.Slf4j;
 
-	private final static Log LOGGER = LogFactory.getLog(ApplicationAuthFilter.class);
+@Slf4j
+public class ApplicationAuthFilter extends AbstractAuthenticationProcessingFilter {
 
 	public ApplicationAuthFilter(String defaultFilterProcessesUrl) {
 		super(defaultFilterProcessesUrl);
@@ -33,13 +32,13 @@ public class ApplicationAuthFilter extends AbstractAuthenticationProcessingFilte
 	@Override
 	protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
 			Authentication authResult) throws IOException, ServletException {
-
-		LOGGER.info("Inside Successful Authentication Handler");
+		
+		log.info("Inside Successful Authentication Handler");
 		if (!this.isAlreadyAuthenticated()) {
 			SecurityContext context = SecurityContextHolder.createEmptyContext();
 			context.setAuthentication(authResult);
 			SecurityContextHolder.setContext(context);
-			LOGGER.info("Add the Authentication Object to Security Context");
+			log.info("Add the Authentication Object to Security Context");
 		}
 
 		chain.doFilter(request, response);
@@ -50,14 +49,14 @@ public class ApplicationAuthFilter extends AbstractAuthenticationProcessingFilte
 	protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,
 			AuthenticationException failed) throws IOException, ServletException {
 		// TODO Auto-generated method stub
-		LOGGER.error("unsuccessful Authentication:-"+failed.getMessage());
+		log.error("unsuccessful Authentication:-"+failed.getMessage());
 		response.sendError(HttpServletResponse.SC_UNAUTHORIZED, failed.getMessage());
 	}
 
 
 	@Override
     protected boolean requiresAuthentication(HttpServletRequest request, HttpServletResponse response) {
-		LOGGER.info("requiresAuthentication");
+		log.info("requiresAuthentication");
 		return super.requiresAuthentication(request, response);
     }
 
@@ -79,14 +78,14 @@ public class ApplicationAuthFilter extends AbstractAuthenticationProcessingFilte
 			throw new InsufficientAuthenticationException("Missing Credentials");
 		}
 
-		LOGGER.info("Attempt Authtentication (Extract Header Value):-"+user);
+		log.info("Attempt Authtentication (Extract Header Value):-"+user);
 		
 		return this.getAuthenticationManager().authenticate(new UsernamePasswordAuthenticationToken(user, null));
 	}
 	private boolean isAlreadyAuthenticated() {
 		if(SecurityContextHolder.getContext().getAuthentication()!=null 
 				&& SecurityContextHolder.getContext().getAuthentication().isAuthenticated()) {
-			LOGGER.info("Already Authenticated");
+			log.info("Already Authenticated");
 			return true;
 		}
 		return false;

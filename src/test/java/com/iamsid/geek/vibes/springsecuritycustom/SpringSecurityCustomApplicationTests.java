@@ -16,9 +16,12 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import lombok.extern.slf4j.Slf4j;
+
 @SpringBootTest
 @AutoConfigureMockMvc
 @RunWith(SpringJUnit4ClassRunner.class)
+@Slf4j
 public class SpringSecurityCustomApplicationTests {
 
 	@Autowired
@@ -31,7 +34,7 @@ public class SpringSecurityCustomApplicationTests {
 		this.mockMvc = MockMvcBuilders.webAppContextSetup(this.context)
 				.apply(SecurityMockMvcConfigurers.springSecurity())
 				.build();
-
+		log.info("Initialize mockMvc completed");
 	}   
 	
 	@Test
