@@ -31,7 +31,7 @@ public class ApplicationAuthenticationProvider implements AuthenticationProvider
 		/*
 		 * Roles should be fetched from database or some other service
 		 */
-		String[] roles = new String[] { "ROLE_AUTHENTICATED"};
+		String[] roles = new String[] { "ROLE_VIEWER","ROLE_WRITE"};
 		
 		log.info("Authentication Process Inside Authentication Provider Completed");
 		
